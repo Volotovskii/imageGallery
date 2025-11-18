@@ -7,13 +7,14 @@
 require_once __DIR__ . '/../config/db.php';
 //require_once __DIR__ . '/../models/ImageModel.php'; // Подключаем модель Image_Model
 
-require_once __DIR__ . '/../model/ImageModel.php';
+require_once __DIR__ . '/../models/ImageModel.php';
+
 //use app\models\Image_Model; // Импортируем класс Image_Model
 
 //use DataBase; // Импортируем класс DataBase из глобального пространства имен
-//use Image_Model;
+//use Image_Model; Controller_Image
 
-class Image_Contoller
+class Controller_Image extends Controller
 {
 
     private $db;
@@ -21,6 +22,8 @@ class Image_Contoller
 
     public function __construct()
     {
+        parent::__construct();
+
         $DataBase = new DataBase();
 
         $this->db = $DataBase->get_connection();
@@ -29,7 +32,7 @@ class Image_Contoller
     }
 
     //Показываем все фотографии
-    public function showImages()
+    public function action_showImages()
     {
         header('Content-Type: application/json');
 
@@ -46,7 +49,7 @@ class Image_Contoller
     }
 
     // добавляем фотографию
-    public function addImages()
+    public function action_addImages()
     {
 
         header('Content-Type: application/json');
@@ -77,7 +80,7 @@ class Image_Contoller
     }
 
     // удаляем фотграфию && коменты
-    public function delImage()
+    public function action_delImage()
     {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['image_id'])) {

@@ -1,0 +1,29 @@
+server {
+    listen 80;
+    server_name localhost; # Или 127.0.0.1
+
+    # Указываем root директорию как папку 'public'
+    # !!! ЗАМЕНИТЕ ЭТО НА АБСОЛЮТНЫЙ ПУТЬ к вашей папке 'public' на вашем компьютере !!!
+    # Пример: root C:/Users/YourUser/Projects/imageGallery/public; (для Windows)
+    # Пример: root /home/youruser/projects/imageGallery/public; (для Linux)
+    root /path/to/your/project/imageGallery/public;
+
+    index index.php index.html index.htm;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        # Этот путь к сокету PHP-FPM может отличаться на вашей локальной машине.
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+
+        fastcgi_index index.php;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
+}

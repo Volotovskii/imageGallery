@@ -4,7 +4,9 @@ export function addImage(data) {
     console.log('data', data);
     $.ajax({
         type: 'POST',
-        url: '/imageGallery/public/upload',
+        //url: '/imageGallery/public/upload',
+        //url: '?url=comments/showComments',
+        url: '?url=image/addImages',
         data: data,
         cache: false,
         contentType: false,

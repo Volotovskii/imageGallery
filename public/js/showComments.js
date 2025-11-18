@@ -12,8 +12,8 @@ export function sendMessage() {
 
     console.log('Текст комментария: ', message,' . Для фотографии id: ',imageIdToSend);
 
-    // Отправка сообщения на сервер
-    fetch('/imageGallery/public/comments', {
+    // Отправка сообщения на сервер url: '?url=comments/addComments',
+    fetch('?url=comments/addComments', {
         method: 'POST',
         body: JSON.stringify({ message: message, id: imageIdToSend }),
     })
@@ -59,7 +59,8 @@ export function loadComments(clickedImageId) {
     console.log('Комментарии загружены для фотографии id:', clickedImageId);
     $.ajax({
         type: 'GET',
-        url: '/imageGallery/public/show_comments',
+        //url: '/imageGallery/public/show_comments',
+        url: '?url=comments/showComments',
         dataType: 'json',
         data: { image_id: clickedImageId },
         success: function (response) {
@@ -132,8 +133,8 @@ export function deleteComment(commentId, imageId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                type: 'POST', // DELETE ?
-                url: '/imageGallery/public/delete_comment',
+                type: 'POST', // DELETE ? 
+                url: '?url=comments/deleteComment',
                 dataType: 'json',
                 data: JSON.stringify({ comment_id: commentId }),
                 // data: { _token: 'CSRF_ТОКЕН' }, //CSRF-токен

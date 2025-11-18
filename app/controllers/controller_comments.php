@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../model/ComentsModel.php';
-
-class Coments_Controller
+require_once __DIR__ . '/../models/ComentsModel.php';
+//Controller_Auth extends Controller
+class Controller_Comments extends Controller
 {
 
     private $db;
@@ -16,7 +16,7 @@ class Coments_Controller
         $this->comments = new Coments_Model($this->db);
     }
 
-    public function showComments()
+    public function action_showComments()
     {
 
         header('Content-Type: application/json');
@@ -43,7 +43,7 @@ class Coments_Controller
         header("Location: /imageGallery/public/");
     }
 
-    public function addComments()
+    public function action_addComments()
     {
         header('Content-Type: application/json');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -76,7 +76,7 @@ class Coments_Controller
         // exit;
     }
 
-    public function deleteComment()
+    public function action_deleteComment()
     {
         header('Content-Type: application/json');
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

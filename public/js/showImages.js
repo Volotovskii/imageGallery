@@ -1,13 +1,15 @@
 
 // Загрузка изображений на странице
 export function loadImages() {
-
+    console.log("loadImages");
     $.ajax({
         type: 'GET',
-        url: '/imageGallery/public/show_images',
+        //url: '/imageGallery/public/show_images', ?url=auth/login
+        url: '?url=image/showImages',
         dataType: 'json',
         success: function (response) {
             if (response.success) {
+                
                 const imageGallery = $('#image-gallery');
                 imageGallery.empty();
                 console.log('Загрузили фотографии loadImages: ', response);
@@ -15,7 +17,7 @@ export function loadImages() {
                 response.images.forEach(function (image) {
                     // распознаем фотки пользовтеля
                     const ovner = image.is_owner ? 'owner' : '';
-
+                    console.log(image);
                     const imageHtml = `
                         <div class="view ${ovner}">
                                      <a href="#" class = "image-gallery-item" data-id="${image.id}">
@@ -34,6 +36,7 @@ export function loadImages() {
 
         },
         error: function (xhr) {
+
             console.error('Ошибка при загрузке изображений:', xhr.responseText);
         }
     });
@@ -61,8 +64,9 @@ export function deletetImage(clickedImageId) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                type: 'POST', // DELETE?
-                url: '/imageGallery/public/load_bucket_image',
+                type: 'POST', // DELETE? url: '?url=image/delImage',
+                //url: '/imageGallery/public/load_bucket_image',
+                url: '?url=image/delImage',
                 dataType: 'json',
                 data: { image_id: clickedImageId },
                 // data: { _token: 'CSRF_ТОКЕН' }, //CSRF-токен TODO

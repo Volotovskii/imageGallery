@@ -17,7 +17,6 @@
 
     <?php
     if (isset($_SESSION['user']['USER_ID'])) {
-
         $username = $_SESSION['user']['login'];
 
     ?>
@@ -28,15 +27,15 @@
                     <p>Роль: <?php echo $_SESSION['user']['role'] ?? 'Нету('; ?></p>
                 </div>
 
-                <a href="/imageGallery/public/logout" id="logoutLink" class="linkPage">Выйти</a>
+                <a href="?url=auth/logout" id="logoutLink" class="linkPage">Выйти</a>
             </div>
 
 
         <?php
-
-        include_once __DIR__ . '/galleries/galleries.php';
-        include_once __DIR__ . '/galleries/show_images.php';
+        //var_dump($_SESSION);
+        include_once __DIR__ . '/galleries/galleries.html';
     } else {
+        //var_dump($_SESSION);
         ?>
 
             <div class="login">
@@ -48,13 +47,17 @@
                         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                     </svg>
                 </button>
+
             </div>
+
+
+
             <div id="authModal" class="modal " data-bs-backdrop="static" style="display:none;">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Форма авторизацииFF</h5>
-                            <div id="error-message" style="color: red;"></div> <!-- Div для вывода ошибок -->
+                            <div id="error-message" style="color: red;"></div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                         </div>
                         <div class="tabs">
@@ -62,7 +65,7 @@
                             <a href="#" class="tab" data-tab="registr">Регистрация</a>
                         </div>
                         <div id="modal-body">
-                            <!-- форма через AJAX -->
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
@@ -74,9 +77,13 @@
 
         <?php
 
-        include_once __DIR__ . '/galleries/show_images.php';
     }
+
+    include_once __DIR__ . '/galleries/show_images.html';
+
         ?>
+
+
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

@@ -46,7 +46,7 @@ class Auth_Model
         $vladivostok_timezone = new DateTimeZone('Asia/Vladivostok');
 
         $data = new DateTime('now', $vladivostok_timezone);
-        $data->modify('+4 minute');  // добавляем срок жизни + неделя  +1 hour
+        $data->modify('+1 minute');  // добавляем срок жизни + неделя  +1 hour
         $expires_at = $data->format('Y-m-d H:i:s');
 
         //$expires_at = date('Y-m-d H:i:s', time() + (30 * 24 * 60 * 60)); // Срок жизни 30 дней
@@ -62,10 +62,13 @@ class Auth_Model
         // $query = 'SELECT user_id, token_hash FROM user_token WHERE expires_at > ?';
         // $st = $this->db->prepare($query);
         // $st->execute([date('Y-m-d H:i:s')]);
+        $vladivostok_timezone = new DateTimeZone('Asia/Vladivostok');
+        $data = new DateTime('now', $vladivostok_timezone);
+
 
         $query = 'SELECT user_id, token_hash  FROM user_token WHERE user_id = ? AND expires_at > ?';
         $st = $this->db->prepare($query);
-        $st->execute([$user_id, date('Y-m-d H:i:s')]);
+        $st->execute([$user_id,  $data->format('Y-m-d H:i:s')]);
 
         return $st->fetch(PDO::FETCH_ASSOC);
     }
@@ -153,7 +156,7 @@ class Auth_Model
                 // Логин найден, проверяем пароль
                 if (!isset($request['password']) || empty($request['password'])) {
                     $errors[]['password'] = 'Пароль не указан';
-                } elseif (!password_verify($request['password'], $user['PASSWORD'])) { // Теперь $user не false
+                } elseif (!password_verify($request['password'], $user['PASSWORD'])) {
                     $errors[]['password'] = 'Пароль не верный';
                 }
                 // Если логин и пароль верны, $user будет содержать данные
@@ -202,28 +205,28 @@ class Auth_Model
 
         if (isset($_COOKIE['remember_me'])) {
             $token = $_COOKIE['remember_me'];
-
+            
             // Ищем запись в базе данных по хешу токена
 
             $row = $this->searchToken($request);
-
+            //var_dump($row);
             if ($row && password_verify($token, $row['token_hash'])) {
                 // Токен валиден, возвращаем user_id
                 return $this->idSearch($request);
             } else {
-
+                session_destroy();
                 // Токен не валиден или истек, удаляем cookie
                 $this->delToken($_SESSION['user']['USER_ID']);
                 setcookie('remember_me', '', time() - 3600, '/'); // Удаляем cookie
 
                 //на страницу регстарции
-                return 'Токен не валиден или истек, удаляем cookie';
+                //return 'Токен не валиден или истек, удаляем cookie';
+                // header('Location: /imageGallery/public');
+                // exit;
+                return NULL;
             }
         }
 
         return NULL; // Пользователь не может быть автоматически залогинен
     }
-
-
-
 }

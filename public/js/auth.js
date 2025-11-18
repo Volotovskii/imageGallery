@@ -2,14 +2,19 @@ let globalCsrfToken = '';
 //loadCsrfToken();
 
 // Разделить на доп файл crfs
-
-
 export function switchModalAuth() {
-    fetch('../app/view/auth/login_modal.php')
+    console.log('switchModalAuth');
+
+    //Открываем заполнение модального окна
+    fetch('?url=auth/loginOpen', {
+            method: 'POST'
+        }
+    )
         .then(response => response.text())
         .then(html => {
+            console.log(html);
             document.getElementById('modal-body').innerHTML = html;
-            document.getElementById('authModal').style.display = 'block';
+            //document.getElementById('authModal').style.display = 'block';
 
             tabLoginRegistr();
             //Регистрация Вход
@@ -24,7 +29,7 @@ export function switchModalAuth() {
 //Функция для загрузки токена через AJAX
 function loadCsrfToken() {
 
-    fetch('/imageGallery/public/get-csrf-token', {
+    fetch('?url=auth/get-csrf-token', {
         method: 'POST',
     }) // Используем новый маршрут
         .then(response => {
@@ -54,7 +59,7 @@ function loadCsrfToken() {
 
 
 
-// Функция для обновления скрытого поля токена в конкретной форме
+//Функция для обновления скрытого поля токена в конкретной форме
 function updateToken(formId, tokenValue) {
     const form = document.getElementById(formId);
     if (form) {
@@ -114,8 +119,8 @@ function tabForm() {
     loginForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
-        //console.log('formData', formData);
-        fetch('/imageGallery/public/login', {
+        //console.log('formData', formData); ?url=auth/action_loginOpen
+        fetch('?url=auth/login', {
             method: 'POST',
             body: formData
         })
@@ -164,7 +169,8 @@ function tabForm() {
         //console.log('data', data);
         $.ajax({
             type: 'POST',
-            url: '/imageGallery/public/register',
+            //url: '/imageGallery/public/register',
+            url: '?url=auth/register',
             data: data,
             cache: false,
             contentType: false,
